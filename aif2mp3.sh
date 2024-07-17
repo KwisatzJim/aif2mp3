@@ -1,8 +1,11 @@
 #!/bin/bash
 
 for file in *.aif; do
-    ffmpeg -i "$file" -codec:a libmp3lame -qscale:a 2 "${file%.aif}.mp3"
+    mp3file="${file%.aif}.mp3"
+    ffmpeg -i "$file" -codec:a libmp3lame -qscale:a 2 "$mp3file"
+    if [ -f "$mp3file" ]; then
+        rm "$file"
+    else
+        echo "Failed to create $mp3file"
+    fi
 done
-
-# remove the aif files to save space.  Comment if you want to keep them
-rm *.aif
